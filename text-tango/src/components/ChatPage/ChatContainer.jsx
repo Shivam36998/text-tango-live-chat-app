@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { IconButton } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Stack, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MessageBox from "./MessageBox";
+import { io } from "socket.io-client";
 
 import {
+  backendhost,
   deleteChatLink,
   deleteMessageLink,
   newChatMessageLink,
@@ -98,6 +100,15 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       .catch(error => console.log(error));
   };
 
+  let socket;
+    socket = io(backendhost);
+  const socketHandler = ( payload) => {
+    socket.emit("sendMessage", payload);
+  }
+   socket.on("recieveMessage", (payload) => {
+     alert("ram ram");
+   });
+
   // # HANDLE SEND MESSAGE
   const handleSendMessage = e => {
     e.preventDefault();
@@ -108,6 +119,13 @@ export default function ChatContainer({ newUser, singleUser, userId }) {
       isSend,
       msg
     );
+    const payload = {
+      text: "ram ram bhai",
+      senderId: userId,
+      chatId: singleUser.chatId,
+      receiverId: singleUser.secondUserId,
+    };
+    socketHandler(payload);
     e.target.msgbox.value = "";
   };
 

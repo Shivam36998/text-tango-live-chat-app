@@ -17,6 +17,12 @@ class chatController {
       const { name, number, userId } = req.body;
 
       // Find the user creating the chat
+      if (!userId) {
+        return res.status(202).json({
+          message: "Invalid user ID",
+          code: "400",
+        });
+      }
       const user = await userModel.findById(userId);
       console.log(user, userId);
       // Find the user being invited to the chat
@@ -31,7 +37,8 @@ class chatController {
       }
 
       // Extract the necessary information from the second user
-      const secondUserId = secondUser._id.toString();
+      const secondUserId = await secondUser._id.toString();
+      console.log("seconduserId ", secondUserId)
       const chatId = user.number + number;
 
       // Prepare the new chat for both users

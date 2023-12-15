@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatSidebar from "./ChatSidebar";
@@ -40,19 +40,19 @@ export default function ChatPage({ userId }) {
   }, [userId, newUser]);
 
   let socket;
-  // useEffect(() => {
-  // console.log("bhagg")
-  socket = io(backendhost);
+  // useEffect(()=> {
+    socket = (io(backendhost));
+  // }, [])
   if (allChat) {
     socket.emit("setup", userId);
   }
-  socket.on("connection", () => {
-    console.log("socket in frontend");
+  socket.on("recieveMessage", payload => {
+    alert("ram ram")
   });
+  socket.on("connected", onlineUsers=>{
+    console.log(onlineUsers)
+  })
 
-  socket.on("connected", (payload) => {
-    console.log("socket now =>", payload);
-  });
 
   return (
     <Wrapper>
